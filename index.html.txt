@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unit Produksi Smart-Tech | Layanan Teknis & Prototipe Siswa TKJ</title>
+    <!-- Memuat Tailwind CSS dari CDN untuk desain responsif --><script src="https://cdn.tailwindcss.com"></script>
+    <!-- Styling Kustom dan Konfigurasi Tailwind --><style>
+        /* Mengatur font default dan scroll behavior */
+        html {
+            scroll-behavior: smooth;
+        }
+        :root {
+            font-family: 'Inter', sans-serif;
+        }
+        /* Custom background gradient for hero section */
+        .bg-tech {
+            background: linear-gradient(135deg, #020617 0%, #0f172a 100%); 
+        }
+        /* Class untuk animasi rotasi chevron */
+        .rotate-180 {
+            transform: rotate(180deg);
+        }
+        /* New: smooth transition for details (Accordion) */
+        .portfolio-details-transition {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease-in-out, padding 0.4s ease-in-out;
+            padding-top: 0;
+            padding-bottom: 0;
+            opacity: 0;
+        }
+        .portfolio-details-open {
+            max-height: 500px; /* Cukup besar untuk menampung konten */
+            padding-top: 1rem;
+            padding-bottom: 1rem;
+            opacity: 1;
+        }
+        /* Styling tambahan untuk input agar terlihat baik di tema gelap */
+        input:focus, textarea:focus {
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(6, 182, 212, 0.5); /* Neon Glow focus */
+        }
+        input, textarea {
+            color: #e2e8f0; 
+            background-color: #1f2937;
+        }
+
+        /* Styling untuk Canvas efek jatuh-jatuh */
+        #neon-particles-canvas {
+            position: fixed; /* Menjadikannya tetap di layar */
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: -1; /* Pastikan di belakang konten lain */
+            pointer-events: none; /* Agar tidak mengganggu interaksi mouse */
+        }
+    </style>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'smart-primary': '#06b6d4', /* Teal Cerah (Vibrant Branding / Neon) */
+                        'smart-accent': '#f97316', /* Electric Orange (CTA Highlight / Neon) */
+                        'smart-dark': '#020617', /* Very Deep Slate (Main Background) */
+                        'smart-card': '#1f2937', /* Dark Slate (Card Background) */
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-smart-dark text-gray-100">
+
+    <!-- Canvas untuk Efek Partikel Neon --><canvas id="neon-particles-canvas"></canvas>
+
+    <!-- Navbar --><nav class="sticky top-0 z-50 bg-smart-card/95 backdrop-blur-sm shadow-xl border-b border-smart-primary/30">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <!-- Logo --><a href="#" class="flex-shrink-0 flex items-center">
+                    <span class="text-xl font-bold text-smart-primary">Smart-Tech</span>
+                    <span class="ml-2 text-sm text-gray-400 hidden md:block">Unit Produksi TKJ</span>
+                </a>
+                <!-- Nav Links (Desktop) --><div class="hidden md:flex space-x-4">
+                    <a href="#layanan" class="text-gray-300 hover:text-smart-primary px-3 py-2 rounded-md text-sm font-medium transition duration-150">Layanan</a>
+                    <a href="#keunggulan" class="text-gray-300 hover:text-smart-primary px-3 py-2 rounded-md text-sm font-medium transition duration-150">Keunggulan</a>
+                    <a href="#portofolio" class="text-gray-300 hover:text-smart-primary px-3 py-2 rounded-md text-sm font-medium transition duration-150">Portofolio</a>
+                    <!-- CTA Button menggunakan warna Aksen mencolok --><a href="#kontak" class="text-white bg-smart-accent hover:bg-orange-600 px-3 py-2 rounded-full text-sm font-medium transition duration-150 shadow-lg shadow-smart-accent/50">Hubungi Kami</a>
+                </div>
+                <!-- Mobile Menu Button --><button id="mobile-menu-button" class="md:hidden p-2 rounded-md text-gray-300 hover:text-smart-primary transition duration-150">
+                    <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+                </button>
+            </div>
+        </div>
+        <!-- Mobile Menu (Hidden by default) --><div id="mobile-menu" class="hidden md:hidden bg-smart-card shadow-lg">
+            <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+                <a href="#layanan" class="block text-gray-300 hover:bg-slate-800 hover:text-smart-primary px-3 py-2 rounded-md text-base font-medium">Layanan</a>
+                <a href="#keunggulan" class="block text-gray-300 hover:bg-slate-800 hover:text-smart-primary px-3 py-2 rounded-md text-base font-medium">Keunggulan</a>
+                <a href="#portofolio" class="block text-gray-300 hover:bg-slate-800 hover:text-smart-primary px-3 py-2 rounded-md text-base font-medium">Portofolio</a>
+                <a href="#kontak" class="block text-white bg-smart-accent hover:bg-orange-600 px-3 py-2 rounded-md text-base font-medium">Hubungi Kami</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section --><section class="bg-tech text-white py-20 md:py-32">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold mb-4 leading-tight">
+                Mengubah Ide Menjadi <span class="text-smart-primary">Teknologi Nyata</span>
+            </h1>
+            <p class="text-xl sm:text-2xl text-gray-400 mb-8 max-w-3xl mx-auto">
+                Unit Produksi & Layanan Teknis Siswa Teknik Komputer dan Jaringan (TKJ). Kami menyediakan solusi prototipe, perbaikan, dan proyek IoT kustom.
+            </p>
+            <!-- CTA Group: Hubungi Kami dan Download Brosur -->
+            <div class="flex flex-col sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-4">
+                <!-- CTA Button 1: Hubungi Kami (Primary) --><a href="#kontak" class="inline-block bg-smart-accent hover:bg-orange-600 text-white font-semibold py-3 px-8 rounded-full shadow-2xl shadow-smart-accent/50 transform hover:scale-105 transition duration-300 ease-in-out">
+                    Mulai Proyek Anda Sekarang →
+                </a>
+                <!-- CTA Button 2: Download Brosur (Secondary/Download) -->
+                <a href="brosur_layanan.pdf" download="brosur_layanan_smart_tech.pdf" class="inline-flex items-center justify-center bg-transparent border-2 border-smart-primary hover:bg-smart-primary/20 text-white font-semibold py-3 px-8 rounded-full transition duration-300 ease-in-out">
+                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+                    Download Brosur
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Layanan Kami (Services Section) --><section id="layanan" class="py-20 bg-smart-dark">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="text-3xl font-bold text-center mb-12 text-white">Layanan Teknis Kami</h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Layanan 1: Prototipe (Card dengan Neon Glow) --><div class="bg-smart-card p-6 rounded-lg shadow-xl hover:shadow-[0_0_20px_rgba(6,182,212,0.6)] transition duration-300 border border-smart-primary/30">
+                    <div class="text-smart-primary mb-4">
+                        <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19V6l4 3l4-3v13m-4 0v-4"></path></svg>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-3 text-white">Pengembangan Prototipe</h3>
+                    <p class="text-gray-300">Bantu kami mengubah sketsa Anda menjadi produk fungsional. Kami ahli dalam desain 3D, cetak PCB, dan perakitan mikro. Ideal untuk proyek sekolah atau startup.</p>
+                </div>
+
+                <!-- Layanan 2: Perbaikan (Card dengan Neon Glow) --><div class="bg-smart-card p-6 rounded-lg shadow-xl hover:shadow-[0_0_20px_rgba(6,182,212,0.6)] transition duration-300 border border-smart-primary/30">
+                    <div class="text-smart-primary mb-4">
+                        <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-3 text-white">Perbaikan Perangkat Keras</h3>
+                    <p class="text-gray-300">Layanan diagnosa dan perbaikan untuk komputer mikro (Arduino, Raspberry Pi), sensor IoT, dan perangkat keras elektronik lainnya. Cepat dan terjamin oleh teknisi siswa.</p>
+                </div>
+
+                <!-- Layanan 3: Solusi Kustom (Card dengan Neon Glow) --><div class="bg-smart-card p-6 rounded-lg shadow-xl hover:shadow-[0_0_20px_rgba(6,182,212,0.6)] transition duration-300 border border-smart-primary/30">
+                    <div class="text-smart-primary mb-4">
+                        <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37a1.724 1.724 0 002.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-3 text-white">Solusi IoT Kustom</h3>
+                    <p class="text-gray-300">Kami merancang dan memprogram solusi Internet of Things (IoT) yang disesuaikan untuk memecahkan masalah spesifik, mulai dari otomatisasi rumah hingga pemantauan lingkungan.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Kenapa Memilih Smart-Tech (New Section) --><section id="keunggulan" class="py-20 bg-slate-900">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="text-3xl font-bold text-center mb-4 text-white">Mengapa Harus Memilih Smart-Tech?</h2>
+            <p class="text-lg text-smart-primary text-center mb-12">Empat Alasan Kuat untuk Mengubah Ide Anda Menjadi Kenyataan Bersama Kami.</p>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                
+                <!-- Keunggulan 1: Inovasi & Keahlian Siswa --><div class="bg-smart-card p-6 rounded-lg border-t-4 border-smart-accent shadow-xl">
+                    <div class="text-smart-accent mb-3">
+                        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1v-3.25m-7.25 0h14.5a.75.75 0 00.75-.75V7.75a.75.75 0 00-.75-.75h-14.5a.75.75 0 00-.75.75v8.5a.75.75 0 00.75.75z"></path></svg>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-2 text-white">Inovasi Muda & Keahlian Terkini</h3>
+                    <p class="text-sm text-gray-300">Proyek Anda dikerjakan oleh siswa-siswi terbaik TKJ yang terlatih dengan kurikulum teknologi terbaru, memastikan solusi Anda selalu mutakhir dan inovatif.</p>
+                </div>
+
+                <!-- Keunggulan 2: Kualitas Terjamin --><div class="bg-smart-card p-6 rounded-lg border-t-4 border-smart-accent shadow-xl">
+                    <div class="text-smart-accent mb-3">
+                        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-2 text-white">Kualitas & Pengawasan Guru Ahli</h3>
+                    <p class="text-sm text-gray-300">Setiap tahap pengembangan prototipe atau perbaikan diawasi ketat oleh guru pembimbing profesional, menjamin standar kualitas tinggi yang dapat diandalkan.</p>
+                </div>
+
+                <!-- Keunggulan 3: Biaya Efisien --><div class="bg-smart-card p-6 rounded-lg border-t-4 border-smart-accent shadow-xl">
+                    <div class="text-smart-accent mb-3">
+                        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-2.485 0-4.5 2.015-4.5 4.5S9.515 17 12 17s4.5-2.015 4.5-4.5S14.485 8 12 8z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.5 12h.01M6.5 12h.01M12 4.5v.01M12 19.5v.01M17.5 5.5l-.01.01M6.5 18.5l-.01.01M17.5 18.5l-.01.01M6.5 5.5l-.01.01"></path></svg>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-2 text-white">Biaya Lebih Efisien & Transparan</h3>
+                    <p class="text-sm text-gray-300">Sebagai unit edukasi, kami menawarkan biaya produksi dan layanan yang jauh lebih bersaing, dengan rincian biaya yang transparan tanpa biaya tersembunyi.</p>
+                </div>
+
+                <!-- Keunggulan 4: Berkontribusi ke Pendidikan --><div class="bg-smart-card p-6 rounded-lg border-t-4 border-smart-accent shadow-xl">
+                    <div class="text-smart-accent mb-3">
+                        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.467 9.577 5 8.288 5c-3.218 0-5.744 3.29-5.744 7s2.526 7 5.744 7c1.289 0 2.544-.467 3.712-1.253M12 6.253C13.168 5.467 14.423 5 15.712 5c3.218 0 5.744 3.29 5.744 7s-2.526 7-5.744 7c-1.289 0-2.544-.467-3.712-1.253"></path></svg>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-2 text-white">Dampak Positif pada Pendidikan</h3>
+                    <p class="text-sm text-gray-300">Setiap proyek yang Anda serahkan turut mendukung dan mendanai peningkatan fasilitas belajar siswa TKJ, menjadikan Anda bagian dari proses edukasi.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Portofolio Singkat (DENGAN EFEK BUKA-TUTUP HALUS) --><section id="portofolio" class="py-20 bg-smart-dark">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h2 class="text-3xl font-bold mb-4 text-white">Portofolio Kami</h2>
+            <p class="text-lg text-gray-400 text-center mb-12">Klik pada judul proyek untuk melihat detail pengerjaan oleh siswa TKJ.</p>
+            
+            <!-- FOTO BANNER UTAMA. GANTI src="smart_tech_banner.jpg" DENGAN GAMBAR BANNER ANDA. --><div class="mb-12">
+                <img src="smart_tech_banner.jpg" alt="Ringkasan Portofolio Smart-Tech" class="w-full max-w-5xl mx-auto h-auto object-cover rounded-xl shadow-2xl shadow-smart-primary/40 border-2 border-smart-primary/50" 
+                     onerror="this.onerror=null;this.src='https://placehold.co/1000x300/06b6d4/020617?text=GAMBAR+PORTOFOLIO'">
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- Proyek 1: Smart Lock Berbasis RFID --><div class="bg-smart-card rounded-lg shadow-xl hover:shadow-[0_0_20px_rgba(249,115,22,0.4)] transition duration-300 border border-smart-accent/20">
+                    <!-- Clickable Header --><div class="p-4 cursor-pointer flex justify-between items-center portfolio-toggle" data-target="details-1">
+                        <h4 class="font-semibold text-lg text-white">Smart Lock Berbasis RFID</h4>
+                        <svg class="w-5 h-5 text-smart-primary transform transition duration-300 chevron-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                    </div>
+                    
+                    <!-- Collapsible Details (Menggunakan transisi max-height) --><div id="details-1" class="portfolio-details-transition portfolio-details border-t border-smart-primary/20">
+                        <div class="p-4">
+                            <!-- GAMBAR PROYEK 1: Smart Lock. GANTI src="smart_lock_proyek.jpg" DENGAN GAMBAR PROYEK ANDA. --><img src="smart_lock_proyek.jpg" alt="Prototipe Smart Lock" class="w-full h-auto rounded-md mb-3 object-cover">
+                            <p class="text-sm text-gray-300 mt-2">
+                                **Deskripsi:** Sistem keamanan cerdas menggunakan otentikasi RFID. Dirancang untuk meningkatkan keamanan pintu laboratorium dan ruang penyimpanan aset sekolah, dengan log akses tercatat di database lokal.
+                            </p>
+                            <ul class="list-disc list-inside text-xs text-left text-gray-400 mt-2 ml-4">
+                                <li>Teknologi: Arduino Uno, Modul RFID RC522.</li>
+                                <li>Keahlian: Integrasi hardware-software & Desain sirkuit.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Proyek 2: Monitor Kualitas Udara Kelas --><div class="bg-smart-card rounded-lg shadow-xl hover:shadow-[0_0_20px_rgba(249,115,22,0.4)] transition duration-300 border border-smart-accent/20">
+                    <!-- Clickable Header --><div class="p-4 cursor-pointer flex justify-between items-center portfolio-toggle" data-target="details-2">
+                        <h4 class="font-semibold text-lg text-white">Monitor Kualitas Udara Kelas</h4>
+                        <svg class="w-5 h-5 text-smart-primary transform transition duration-300 chevron-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                    </div>
+                    
+                    <!-- Collapsible Details (Menggunakan transisi max-height) --><div id="details-2" class="portfolio-details-transition portfolio-details border-t border-smart-primary/20">
+                        <div class="p-4">
+                            <!-- GAMBAR PROYEK 2: Monitor Udara. GANTI src="monitor_udara_proyek.jpg" DENGAN GAMBAR PROYEK ANDA. --><img src="monitor_udara_proyek.jpg" alt="Monitor Kualitas Udara" class="w-full h-auto rounded-md mb-3 object-cover">
+                            <p class="text-sm text-gray-300 mt-2">
+                                **Deskripsi:** Perangkat IoT yang mengukur suhu, kelembaban, dan konsentrasi CO2 di ruang kelas. Data dikirimkan secara *realtime* ke dashboard berbasis web.
+                            </p>
+                            <ul class="list-disc list-inside text-xs text-left text-gray-400 mt-2 ml-4">
+                                <li>Teknologi: ESP32, Sensor DHT11 & MQ-135.</li>
+                                <li>Keahlian: Pengembangan firmware, API, dan *data visualization*.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Proyek 3: Lengan Robotik Edukasi --><div class="bg-smart-card rounded-lg shadow-xl hover:shadow-[0_0_20px_rgba(249,115,22,0.4)] transition duration-300 border border-smart-accent/20">
+                    <!-- Clickable Header --><div class="p-4 cursor-pointer flex justify-between items-center portfolio-toggle" data-target="details-3">
+                        <h4 class="font-semibold text-lg text-white">Lengan Robotik Edukasi</h4>
+                        <svg class="w-5 h-5 text-smart-primary transform transition duration-300 chevron-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                    </div>
+                    
+                    <!-- Collapsible Details (Menggunakan transisi max-height) --><div id="details-3" class="portfolio-details-transition portfolio-details border-t border-smart-primary/20">
+                        <div class="p-4">
+                            <!-- GAMBAR PROYEK 3: Lengan Robotik. GANTI src="robotik_proyek.jpg" DENGAN GAMBAR PROYEK ANDA. --><img src="robotik_proyek.jpg" alt="Lengan Robotik Edukasi" class="w-full h-auto rounded-md mb-3 object-cover">
+                            <p class="text-sm text-gray-300 mt-2">
+                                **Deskripsi:** Lengan robot 4-DOF yang dirancang sebagai alat bantu belajar mekanika dan pemrograman robotika. Dikontrol melalui *joystick* atau antarmuka web.
+                            </p>
+                            <ul class="list-disc list-inside text-xs text-left text-gray-400 mt-2 ml-4">
+                                <li>Teknologi: Servo Motor MG996R, Kontroler Teensy/Arduino Mega.</li>
+                                <li>Keahlian: Perancangan mekanik, kontrol motor, dan pemrograman kinematika.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <a href="#" class="mt-12 inline-block text-smart-primary hover:text-cyan-400 font-medium text-lg border-b-2 border-smart-primary">Lihat Semua Proyek →</a>
+        </div>
+    </section>
+
+    <!-- Hubungi Kami (Contact Section) --><section id="kontak" class="py-20 bg-smart-dark">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="text-3xl font-bold text-center mb-4 text-white">Hubungi Kami</h2>
+            <p class="text-lg text-gray-400 text-center mb-10">Ajukan pertanyaan, permintaan kolaborasi, atau diskusikan proyek Anda.</p>
+            
+            <div class="max-w-xl mx-auto bg-smart-card p-8 rounded-xl shadow-2xl border border-smart-accent/30">
+                <form id="contactForm">
+                    <div class="mb-4">
+                        <label for="name" class="block text-sm font-medium text-gray-300 mb-1">Nama Lengkap</label>
+                        <input type="text" id="name" name="name" class="w-full p-3 border border-gray-600 rounded-lg focus:ring-smart-primary transition duration-150" required>
+                    </div>
+                    <div class="mb-4">
+                        <label for="email" class="block text-sm font-medium text-gray-300 mb-1">Email (Balasan Kami)</label>
+                        <input type="email" id="email" name="email" class="w-full p-3 border border-gray-600 rounded-lg focus:ring-smart-primary transition duration-150" required>
+                    </div>
+                    <div class="mb-6">
+                        <label for="message" class="block text-sm font-medium text-gray-300 mb-1">Detail Permintaan / Pesan Anda</label>
+                        <textarea id="message" name="message" rows="4" class="w-full p-3 border border-gray-600 rounded-lg focus:ring-smart-primary resize-none transition duration-150" required></textarea>
+                    </div>
+                    <button type="submit" class="w-full bg-smart-primary hover:bg-cyan-600 text-smart-dark font-bold py-3 rounded-full shadow-lg shadow-smart-primary/50 transform hover:scale-[1.02] transition duration-300">
+                        Kirim Pesan
+                    </button>
+                    <!-- Area untuk pesan konfirmasi --><p id="confirmation-message" class="hidden mt-4 text-center text-green-400 font-semibold"></p>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer --><footer class="bg-smart-dark text-white py-8 border-t border-smart-primary/20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <p class="mb-4">Unit Produksi Smart-Tech | Inovasi Siswa TKJ, Solusi Profesional</p>
+            <div class="flex justify-center space-x-4 text-gray-400">
+                <a href="#layanan" class="hover:text-smart-primary">Layanan</a>
+                <span>|</span>
+                <a href="#keunggulan" class="hover:text-smart-primary">Keunggulan</a>
+                <span>|</span>
+                <a href="#portofolio" class="hover:text-smart-primary">Portofolio</a>
+                <span>|</span>
+                <a href="mailto:smarttech@sekolah.edu" class="hover:text-smart-primary">Email Resmi</a>
+            </div>
+            <p class="mt-6 text-sm text-gray-500">Hak Cipta &copy; <span id="current-year"></span> Unit Produksi Smart-Tech.</p>
+        </div>
+    </footer>
+
+    <!-- JavaScript untuk Interaktivitas dan Efek Neon Jatuh --><script>
+        // Set tahun saat ini di footer
+        document.getElementById('current-year').textContent = new Date().getFullYear();
+
+        // Toggle Menu Mobile
+        const mobileMenuButton = document.getElementById('mobile-menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
+        
+        mobileMenuButton.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+
+        // Close mobile menu when a link is clicked
+        const mobileLinks = mobileMenu.querySelectorAll('a');
+        mobileLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                mobileMenu.classList.add('hidden');
+            });
+        });
+
+        // Form Submission Handler (Menggantikan alert/confirm)
+        document.getElementById('contactForm').addEventListener('submit', function(event) {
+            event.preventDefault(); 
+            
+            const name = document.getElementById('name').value;
+            const messageArea = document.getElementById('confirmation-message');
+
+            // Tampilkan pesan konfirmasi di area khusus (bukan alert)
+            messageArea.textContent = `Terima kasih, ${name}! Pesan Anda telah diterima oleh Unit Smart-Tech. Kami akan segera membalasnya.`;
+            messageArea.classList.remove('hidden');
+            
+            // Opsional: reset form setelah 5 detik
+            setTimeout(() => {
+                document.getElementById('contactForm').reset();
+                messageArea.classList.add('hidden');
+            }, 5000);
+        });
+
+        // Logika Accordion Portofolio (Buka-Tutup Halus)
+        document.querySelectorAll('.portfolio-toggle').forEach(header => {
+            header.addEventListener('click', () => {
+                const targetId = header.getAttribute('data-target');
+                const details = document.getElementById(targetId);
+                const chevron = header.querySelector('.chevron-icon');
+
+                // Toggle the open class for smooth transition
+                details.classList.toggle('portfolio-details-open');
+                
+                // Toggle the chevron rotation (up/down arrow visual indicator)
+                chevron.classList.toggle('rotate-180');
+            });
+        });
+
+        // --- JavaScript untuk Efek Jatuh-Jatuh Berwarna Biru Neon ---
+        const canvas = document.getElementById('neon-particles-canvas');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+        const maxParticles = 50; // Jumlah maksimum partikel
+        const particleColor = 'rgba(6, 182, 212, 0.7)'; // Warna biru neon dengan sedikit transparansi
+        const glowColor = 'rgba(6, 182, 212, 0.3)'; // Warna glow
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+
+        class Particle {
+            constructor() {
+                this.reset();
+            }
+
+            reset() {
+                this.x = Math.random() * canvas.width;
+                this.y = -Math.random() * canvas.height * 0.2; // Mulai dari atas, sedikit di luar layar
+                this.size = Math.random() * 2 + 1; // Ukuran partikel kecil
+                this.speed = Math.random() * 1 + 0.5; // Kecepatan jatuh
+                this.opacity = Math.random() * 0.5 + 0.3; // Transparansi
+            }
+
+            update() {
+                this.y += this.speed;
+                if (this.y > canvas.height) {
+                    this.reset(); // Reset ke atas jika sudah jatuh melewati layar
+                }
+            }
+
+            draw() {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fillStyle = particleColor;
+                ctx.shadowColor = glowColor;
+                ctx.shadowBlur = this.size * 3; // Efek glow
+                ctx.fill();
+                ctx.closePath();
+            }
+        }
+
+        function createParticles() {
+            for (let i = 0; i < maxParticles; i++) {
+                particles.push(new Particle());
+            }
+        }
+
+        function animateParticles() {
+            requestAnimationFrame(animateParticles);
+            ctx.clearRect(0, 0, canvas.width, canvas.height); // Bersihkan canvas
+
+            for (let i = 0; i < particles.length; i++) {
+                particles[i].update();
+                particles[i].draw();
+            }
+        }
+
+        // Inisialisasi
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+        createParticles();
+        animateParticles();
+
+    </script>
+
+</body>
+</html>
